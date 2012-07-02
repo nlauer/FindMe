@@ -59,19 +59,20 @@
 
 - (void)startStandardUpdates
 {
-    [CLLocationManager locationServicesEnabled];
-    // Create the location manager if this object does not
-    // already have one.
-    if (nil == _locationManager)
-        _locationManager = [[CLLocationManager alloc] init];
-    
-    _locationManager.delegate = self;
-    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-    // Set a movement threshold for new events.
-    _locationManager.distanceFilter = 500;
-    
-    [_locationManager startUpdatingLocation];
+    if ([CLLocationManager locationServicesEnabled]) {
+        // Create the location manager if this object does not
+        // already have one.
+        if (nil == _locationManager)
+            _locationManager = [[CLLocationManager alloc] init];
+        
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        
+        // Set a movement threshold for new events.
+        _locationManager.distanceFilter = 500;
+        
+        [_locationManager startUpdatingLocation];
+    }
 }
 
 // Delegate method from the CLLocationManagerDelegate protocol.

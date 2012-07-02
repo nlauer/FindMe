@@ -55,7 +55,9 @@
 
 - (void)donePickingPeople
 {
-    [self sendTextMessage];
+    if ([((NLAppDelegate*)[[UIApplication sharedApplication] delegate]) googleMapsString]) {
+        [self sendTextMessage];
+    }
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:
