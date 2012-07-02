@@ -22,9 +22,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _phoneNumbers = [[NSMutableArray alloc] init];
-    [self performSelector:@selector(displayPeoplePickerNavigationController:) withObject:[NSNumber numberWithBool:NO] afterDelay:0.1];
-}
+    _phoneNumbers = [[NSMutableArray alloc] init];}
 
 - (void)viewDidUnload
 {
@@ -32,9 +30,10 @@
     // Release any retained subviews of the main view.
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
+    [self displayPeoplePickerNavigationController:[NSNumber numberWithBool:NO]];
 }
 
 - (void)displayPeoplePickerNavigationController:(NSNumber*)animated
