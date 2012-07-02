@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class NLViewController;
 
-@interface NLAppDelegate : UIResponder <UIApplicationDelegate>
+@interface NLAppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 @property (strong, nonatomic) NLViewController *viewController;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) NSString *googleMapsString;
 
 @end

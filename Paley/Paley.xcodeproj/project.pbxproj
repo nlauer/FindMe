@@ -16,6 +16,9 @@
 		8580949515A2181000A0E91E /* NLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8580949415A2181000A0E91E /* NLViewController.m */; };
 		8580949815A2181000A0E91E /* NLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8580949615A2181000A0E91E /* NLViewController.xib */; };
 		858094A515A218BA00A0E91E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 858094A215A218A800A0E91E /* CoreLocation.framework */; };
+		858094B015A2288B00A0E91E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 858094AF15A2288B00A0E91E /* MessageUI.framework */; };
+		858094B215A233D600A0E91E /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 858094B115A233D600A0E91E /* AddressBookUI.framework */; };
+		858094B415A23C7C00A0E91E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 858094B315A23C7C00A0E91E /* AddressBook.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,9 @@
 		8580949415A2181000A0E91E /* NLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NLViewController.m; sourceTree = "<group>"; };
 		8580949715A2181000A0E91E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NLViewController.xib; sourceTree = "<group>"; };
 		858094A215A218A800A0E91E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		858094AF15A2288B00A0E91E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		858094B115A233D600A0E91E /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		858094B315A23C7C00A0E91E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +46,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				858094B415A23C7C00A0E91E /* AddressBook.framework in Frameworks */,
+				858094B215A233D600A0E91E /* AddressBookUI.framework in Frameworks */,
+				858094B015A2288B00A0E91E /* MessageUI.framework in Frameworks */,
 				858094A515A218BA00A0E91E /* CoreLocation.framework in Frameworks */,
 				8580948215A2180F00A0E91E /* UIKit.framework in Frameworks */,
 				8580948415A2180F00A0E91E /* Foundation.framework in Frameworks */,
@@ -53,6 +62,9 @@
 		8580947215A2180F00A0E91E = {
 			isa = PBXGroup;
 			children = (
+				858094B315A23C7C00A0E91E /* AddressBook.framework */,
+				858094B115A233D600A0E91E /* AddressBookUI.framework */,
+				858094AF15A2288B00A0E91E /* MessageUI.framework */,
 				8580948715A2180F00A0E91E /* Paley */,
 				8580948015A2180F00A0E91E /* Frameworks */,
 				8580947E15A2180F00A0E91E /* Products */,
@@ -230,7 +242,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -248,7 +260,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

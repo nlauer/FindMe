@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MFMessageComposeViewController.h>
+#import <AddressBookUI/AddressBookUI.h>
 
-@interface NLViewController : UIViewController
-
+@interface NLViewController : UIViewController <MFMessageComposeViewControllerDelegate, ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate>
 @end
