@@ -58,6 +58,14 @@
     if ([((NLAppDelegate*)[[UIApplication sharedApplication] delegate]) googleMapsString]) {
         [self sendTextMessage];
     }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Undeterminable Location" 
+                                                        message:@"Check your connection settings" 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:
