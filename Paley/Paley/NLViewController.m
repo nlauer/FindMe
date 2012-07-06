@@ -12,45 +12,49 @@
 
 @interface NLViewController ()
 @property (strong, nonatomic) NSMutableArray *phoneNumbers;
-@property (strong, nonatomic) ABPeoplePickerNavigationController *picker;
+@property (nonatomic, assign) CFArrayRef arrayOfPeople;
+@property (strong, nonatomic) NSMutableArray *selectedIndexes;
 @end
 
 @implementation NLViewController
+@synthesize navItem = _navItem;
+@synthesize navBar = _navBar;
+@synthesize tableView = _tableView;
 @synthesize phoneNumbers = _phoneNumbers;
-@synthesize picker = _picker;
+@synthesize arrayOfPeople = _arrayOfPeople;
+@synthesize selectedIndexes = _selectedIndexes;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        ABAddressBookRef addressBook = ABAddressBookCreate();
+        ABRecordRef source = ABAddressBookCopyDefaultSource(addressBook);
+        self.arrayOfPeople = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, kABPersonSortByLastName);
+        self.selectedIndexes = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _phoneNumbers = [[NSMutableArray alloc] init];}
+    _phoneNumbers = [[NSMutableArray alloc] init];
+     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(donePickingPeople)];
+    [self.navItem setRightBarButtonItem:doneButton];
+    [self.navBar setBarStyle:UIBarStyleBlack];
+    self.navItem.title = @"Come Here!";
+}
 
 - (void)viewDidUnload
 {
+    [self.tableView setDelegate:nil];
+    [self.tableView setDataSource:nil];
+    [self setTableView:nil];
+    [self setNavBar:nil];
+    [self setNavItem:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self displayPeoplePickerNavigationController:[NSNumber numberWithBool:NO]];
-}
-
-- (void)displayPeoplePickerNavigationController:(NSNumber*)animated
-{
-    ABPeoplePickerNavigationController *picker =
-    [[ABPeoplePickerNavigationController alloc] init];
-    picker.peoplePickerDelegate = self;
-    [picker setDelegate:self];
-    self.picker = picker;
-    [self presentViewController:picker animated:[animated boolValue] completion:nil];
-    picker.navigationBar.topItem.title = @"Come Here!";
-    [picker.navigationBar setBarStyle:UIBarStyleBlack];
-}
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(donePickingPeople)];
-    [viewController.navigationItem setRightBarButtonItem:doneButton animated:NO]; 
 }
 
 - (void)donePickingPeople
@@ -68,59 +72,7 @@
     }
 }
 
-- (void)peoplePickerNavigationControllerDidCancel:
-(ABPeoplePickerNavigationController *)peoplePicker
-{
-    //never gets called
-}
-
-- (BOOL)peoplePickerNavigationController:
-(ABPeoplePickerNavigationController *)peoplePicker
-      shouldContinueAfterSelectingPerson:(ABRecordRef)person {
-    
-    NSString* phone = nil;
-    ABMultiValueRef phoneNumbers = ABRecordCopyValue(person,
-                                                     kABPersonPhoneProperty);
-    if (ABMultiValueGetCount(phoneNumbers) > 0) {
-        phone = (__bridge_transfer NSString*)
-        ABMultiValueCopyValueAtIndex(phoneNumbers, 0);
-    }
-    
-    UIView *view = peoplePicker.topViewController.view;
-    UITableView *tableView = nil;
-    for(UIView *uv in view.subviews)
-    {
-        if([uv isKindOfClass:[UITableView class]])
-        {
-            tableView = (UITableView*)uv;
-            break;
-        }
-    }
-    
-    if(tableView != nil)
-    {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[tableView indexPathForSelectedRow]];
-        cell.accessoryType == UITableViewCellAccessoryNone ? [_phoneNumbers addObject:phone] : [_phoneNumbers removeObject:phone];
-        cell.accessoryType = cell.accessoryType == UITableViewCellAccessoryNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-        [cell setSelected:NO animated:YES];
-    }
-    
-    return NO;
-}
-
-- (BOOL)peoplePickerNavigationController:
-(ABPeoplePickerNavigationController *)peoplePicker
-      shouldContinueAfterSelectingPerson:(ABRecordRef)person
-                                property:(ABPropertyID)property
-                              identifier:(ABMultiValueIdentifier)identifier
-{
-    return NO;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
+#pragma mark Sending the SMS
 
 - (void)sendTextMessage {
     NSString *gooleMapsString = [((NLAppDelegate*)[[UIApplication sharedApplication] delegate]) googleMapsString];
@@ -136,12 +88,84 @@
         controller.body = bodyOfMessage;    
         controller.recipients = recipients;
         controller.messageComposeDelegate = self;
-        [_picker presentModalViewController:controller animated:YES];
+        [self presentModalViewController:controller animated:YES];
     }    
 }
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
-    [_picker dismissModalViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    ABAddressBookRef addressBook = ABAddressBookCreate();
+    ABRecordRef source = ABAddressBookCopyDefaultSource(addressBook);
+    return [(__bridge_transfer NSArray*)ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, kABPersonSortByLastName) count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *reuseIdentifier = @"cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    }
+    
+    int index = indexPath.row;
+    ABRecordRef person = CFArrayGetValueAtIndex(self.arrayOfPeople, index);
+    NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(person,
+                                                                         kABPersonFirstNameProperty);
+    NSString* lastName = (__bridge_transfer NSString*)ABRecordCopyValue(person,
+                                                                        kABPersonLastNameProperty);
+    NSString *name = nil;
+    if (firstName && lastName) {
+        name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+    } else if (firstName) {
+        name = [NSString stringWithFormat:@"%@", firstName];
+    } else if (lastName) {
+        name = [NSString stringWithFormat:@"%@", lastName];
+    } else {
+        name = @"Unavailable";
+    }
+    cell.accessoryType = [_selectedIndexes containsObject:indexPath] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.textLabel.text = name;
+    return cell;
+}
+
+#pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    int index = indexPath.row;
+    ABRecordRef person = CFArrayGetValueAtIndex(self.arrayOfPeople, index);
+    NSString* phone = nil;
+    ABMultiValueRef phoneNumbers = ABRecordCopyValue(person,
+                                                     kABPersonPhoneProperty);
+    if (ABMultiValueGetCount(phoneNumbers) > 0) {
+        phone = (__bridge_transfer NSString*)
+        ABMultiValueCopyValueAtIndex(phoneNumbers, 0);
+    } 
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [_selectedIndexes addObject:indexPath];
+        if (phone) {
+            [_phoneNumbers addObject:phone];
+        }
+    } else if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [_selectedIndexes removeObject:indexPath];
+        if (phone) {
+            [_phoneNumbers removeObject:phone];
+        }
+    } 
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 @end

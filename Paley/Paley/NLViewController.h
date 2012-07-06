@@ -10,5 +10,8 @@
 #import <MessageUI/MFMessageComposeViewController.h>
 #import <AddressBookUI/AddressBookUI.h>
 
-@interface NLViewController : UIViewController <MFMessageComposeViewControllerDelegate, ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate>
+@interface NLViewController : UIViewController <MFMessageComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UINavigationItem *navItem;
+@property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
