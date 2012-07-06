@@ -13,5 +13,9 @@
 @interface NLViewController : UIViewController <MFMessageComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UINavigationItem *navItem;
 @property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
+@property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+- (IBAction)donePickingPeople;
+
 @end

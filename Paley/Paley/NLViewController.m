@@ -19,6 +19,7 @@
 @implementation NLViewController
 @synthesize navItem = _navItem;
 @synthesize navBar = _navBar;
+@synthesize sendButton = _sendButton;
 @synthesize tableView = _tableView;
 @synthesize phoneNumbers = _phoneNumbers;
 @synthesize arrayOfPeople = _arrayOfPeople;
@@ -40,10 +41,9 @@
 {
     [super viewDidLoad];
     _phoneNumbers = [[NSMutableArray alloc] init];
-     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStyleDone target:self action:@selector(donePickingPeople)];
-    [self.navItem setRightBarButtonItem:doneButton];
     [self.navBar setBarStyle:UIBarStyleBlack];
     self.navItem.title = @"Come Here!";
+    
 }
 
 - (void)viewDidUnload
@@ -53,11 +53,12 @@
     [self setTableView:nil];
     [self setNavBar:nil];
     [self setNavItem:nil];
+    [self setSendButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
 
-- (void)donePickingPeople
+- (IBAction)donePickingPeople
 {
     if ([((NLAppDelegate*)[[UIApplication sharedApplication] delegate]) googleMapsString]) {
         [self sendTextMessage];
@@ -161,7 +162,8 @@
         if (phone) {
             [_phoneNumbers removeObject:phone];
         }
-    } 
+    }
+    [_sendButton setTitle:[NSString stringWithFormat:[_phoneNumbers count] == 1 ?@"Send to %d Contact" : @"Send to %d Contacts", [_phoneNumbers count]] forState:UIControlStateNormal];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
